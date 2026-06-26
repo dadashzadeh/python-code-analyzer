@@ -63,26 +63,26 @@ pip install -e .
 #### Basic
 
 ```bash
-python -m directory_tree /path/to/project
+python -m python-code-analyzer /path/to/project
 ```
 
 #### Show functions, classes, and imports
 
 ```bash
-python -m directory_tree . -f -c -i
+python -m python-code-analyzer . -f -c -i
 ```
 
 #### Full analysis (everything!)
 
 ```bash
-python -m directory_tree . -A
+python -m python-code-analyzer . -A
 ```
 
 #### Export to Markdown / HTML
 
 ```bash
-python -m directory_tree . -A --markdown report.md
-python -m directory_tree . -A --html report.html
+python -m python-code-analyzer . -A --markdown report.md
+python -m python-code-analyzer . -A --html report.html
 ```
 
 ---
@@ -95,8 +95,8 @@ You can use Directory Tree Analyzer directly from your Python code without invok
 
 ```python
 from pathlib import Path
-from directory_tree import TreeGenerator, AnalysisOptions, DisplayFilter
-from directory_tree.renderers import TextRenderer
+from python-code-analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
+from python-code-analyzer.renderers import TextRenderer
 
 # Configure what to extract from code
 analysis_opts = AnalysisOptions(
@@ -132,8 +132,8 @@ print(text_output)
 
 ```python
 from pathlib import Path
-from directory_tree import TreeGenerator, AnalysisOptions, DisplayFilter
-from directory_tree.renderers import MarkdownRenderer
+from python-code-analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
+from python-code-analyzer.renderers import MarkdownRenderer
 
 # Enable every analysis feature
 analysis_opts = AnalysisOptions(
@@ -186,8 +186,8 @@ print("✅ Analysis report saved to analysis_report.md")
 
 ```python
 from pathlib import Path
-from directory_tree.analyzer import CodeAnalyzer
-from directory_tree.models import AnalysisOptions
+from python-code-analyzer.analyzer import CodeAnalyzer
+from python-code-analyzer.models import AnalysisOptions
 
 analyzer = CodeAnalyzer("my_module.py")
 
@@ -212,7 +212,7 @@ for element in elements:
 #### Example 4: Detecting Dead Code
 
 ```python
-from directory_tree.analyzer import CodeAnalyzer
+from python-code-analyzer.analyzer import CodeAnalyzer
 
 analyzer = CodeAnalyzer("my_module.py")
 dead_items = analyzer.get_dead_code(strict=False)
@@ -226,7 +226,7 @@ for item in dead_items:
 #### Example 5: Extracting TODO/FIXME Markers
 
 ```python
-from directory_tree.analyzer import CodeAnalyzer
+from python-code-analyzer.analyzer import CodeAnalyzer
 
 analyzer = CodeAnalyzer("my_module.py")
 markers = analyzer.get_comment_markers()
@@ -240,7 +240,7 @@ for marker in markers:
 
 ```python
 from pathlib import Path
-from directory_tree import TreeGenerator, AnalysisOptions, DisplayFilter
+from python-code-analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
 
 opts = AnalysisOptions(
     include_dead_code=True,
@@ -323,7 +323,7 @@ walk_tree(root)
 ## 🏗️ Project Structure
 
 ```
-directory_tree/
+python-code-analyzer/
 ├── __init__.py              # Public API exports
 ├── __main__.py              # python -m entry point
 ├── cli.py                   # CLI argument parsing
@@ -379,7 +379,7 @@ pytest
 With coverage:
 
 ```bash
-pytest --cov=directory_tree --cov-report=html
+pytest --cov=python-code-analyzer --cov-report=html
 ```
 
 ---
@@ -390,7 +390,7 @@ Contributions are welcome! Please:
 
 1. Fork the repo
 2. Create a feature branch (`git checkout -b feature/amazing`)
-3. Run tests & lint (`pytest && ruff check directory_tree/`)
+3. Run tests & lint (`pytest && ruff check python-code-analyzer/`)
 4. Submit a Pull Request
 
 ---

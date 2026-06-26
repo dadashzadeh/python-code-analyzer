@@ -1,4 +1,4 @@
-"""Allow ``python -m directory_tree``."""
+"""Allow ``python -m python-code-analyzer``."""
 
 from .cli import main
 

@@ -22,7 +22,7 @@ logging.basicConfig(
 def build_parser() -> argparse.ArgumentParser:
     """Construct and return the argument parser."""
     parser = argparse.ArgumentParser(
-        prog="directory_tree",
+        prog="python-code-analyzer",
         description="Generate an annotated directory tree with Python analysis.",
     )
     parser.add_argument(
