@@ -63,26 +63,26 @@ pip install -e .
 #### Basic
 
 ```bash
-python -m python-code-analyzer /path/to/project
+python -m python_code_analyzer /path/to/project
 ```
 
 #### Show functions, classes, and imports
 
 ```bash
-python -m python-code-analyzer . -f -c -i
+python -m python_code_analyzer . -f -c -i
 ```
 
 #### Full analysis (everything!)
 
 ```bash
-python -m python-code-analyzer . -A
+python -m python_code_analyzer . -A
 ```
 
 #### Export to Markdown / HTML
 
 ```bash
-python -m python-code-analyzer . -A --markdown report.md
-python -m python-code-analyzer . -A --html report.html
+python -m python_code_analyzer . -A --markdown report.md
+python -m python_code_analyzer . -A --html report.html
 ```
 
 ---
@@ -95,8 +95,8 @@ You can use Directory Tree Analyzer directly from your Python code without invok
 
 ```python
 from pathlib import Path
-from python-code-analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
-from python-code-analyzer.renderers import TextRenderer
+from python_code_analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
+from python_code_analyzer.renderers import TextRenderer
 
 # Configure what to extract from code
 analysis_opts = AnalysisOptions(
@@ -132,8 +132,8 @@ print(text_output)
 
 ```python
 from pathlib import Path
-from python-code-analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
-from python-code-analyzer.renderers import MarkdownRenderer
+from python_code_analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
+from python_code_analyzer.renderers import MarkdownRenderer
 
 # Enable every analysis feature
 analysis_opts = AnalysisOptions(
@@ -186,8 +186,8 @@ print("✅ Analysis report saved to analysis_report.md")
 
 ```python
 from pathlib import Path
-from python-code-analyzer.analyzer import CodeAnalyzer
-from python-code-analyzer.models import AnalysisOptions
+from python_code_analyzer.analyzer import CodeAnalyzer
+from python_code_analyzer.models import AnalysisOptions
 
 analyzer = CodeAnalyzer("my_module.py")
 
@@ -212,7 +212,7 @@ for element in elements:
 #### Example 4: Detecting Dead Code
 
 ```python
-from python-code-analyzer.analyzer import CodeAnalyzer
+from python_code_analyzer.analyzer import CodeAnalyzer
 
 analyzer = CodeAnalyzer("my_module.py")
 dead_items = analyzer.get_dead_code(strict=False)
@@ -226,7 +226,7 @@ for item in dead_items:
 #### Example 5: Extracting TODO/FIXME Markers
 
 ```python
-from python-code-analyzer.analyzer import CodeAnalyzer
+from python_code_analyzer.analyzer import CodeAnalyzer
 
 analyzer = CodeAnalyzer("my_module.py")
 markers = analyzer.get_comment_markers()
@@ -240,7 +240,7 @@ for marker in markers:
 
 ```python
 from pathlib import Path
-from python-code-analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
+from python_code_analyzer import TreeGenerator, AnalysisOptions, DisplayFilter
 
 opts = AnalysisOptions(
     include_dead_code=True,
@@ -270,6 +270,66 @@ def walk_tree(node):
         walk_tree(child)
 
 walk_tree(root)
+```
+
+#### Example 6: Issue Reporter
+
+```
+from pathlib import Path
+from python_code_analyzer.models import AnalysisOptions, DisplayFilter
+from python_code_analyzer.issue_reporter import IssueReporter, IssueReporterConfig
+
+# Define analysis options
+analysis_opts = AnalysisOptions(
+    include_signatures=True,
+    include_docstrings=True,
+    include_decorators=True,
+    include_variables=True,
+    include_line_numbers=True,
+    include_type_hints=True,
+    include_exceptions=True,
+    include_call_graph=True,
+    include_markers=True,
+    include_complexity=True,
+    include_dead_code=True,
+    include_dependencies=True,
+    strict_dead_code=False,
+    cross_file_analysis=True,  # Enable project-wide dead code detection
+)
+
+display_filter = DisplayFilter(
+    show_functions=True,
+    show_classes=True,
+    show_imports=True,
+    show_variables=True,
+    show_type_hints=True,
+    show_exceptions=True,
+    show_call_graph=True,
+    show_markers=True,
+    show_complexity=True,
+    show_dead_code=True,
+    show_dependencies=True,
+)
+
+# Create config from options
+config = IssueReporterConfig.from_analysis_options(analysis_opts, display_filter)
+# Or create config directly
+config = IssueReporterConfig(
+    max_line_length=99,
+    max_function_complexity=10,
+    check_dead_code=True,
+    cross_file_analysis=True,
+    strict_dead_code=False,
+    check_documentation=True,
+    require_docstrings=True,
+)
+
+
+# Analyze project
+reporter = IssueReporter(config)
+report = reporter.analyze_directory(Path("./python-code-analyzer"))
+# Print report
+print(reporter.format_report(report, format_type="text"))
 ```
 
 ---
@@ -323,21 +383,27 @@ walk_tree(root)
 ## 🏗️ Project Structure
 
 ```
-python-code-analyzer/
-├── __init__.py              # Public API exports
-├── __main__.py              # python -m entry point
-├── cli.py                   # CLI argument parsing
-├── constants.py             # Shared constants
-├── models.py                # Data structures (dataclasses)
-├── analyzer.py              # Per-file Python source analysis
-├── project_analyzer.py      # Cross-file dead code analysis
-├── generator.py             # Tree walker
-└── renderers/
-    ├── __init__.py
-    ├── base.py              # BaseRenderer (ABC)
-    ├── text.py              # Plain text
-    ├── markdown.py          # Markdown
-    └── html.py              # HTML / Mermaid
+python-code-analyzer/                 ← Repository root
+├── python_code_analyzer/             ← Python package
+│   ├── __init__.py
+│   ├── __main__.py
+│   ├── cli.py
+│   ├── constants.py
+│   ├── models.py
+│   ├── analyzer.py
+│   ├── project_analyzer.py
+│   ├── generator.py
+│   ├── issue_reporter.py
+│   └── renderers/
+│       ├── __init__.py
+│       ├── base.py
+│       ├── text.py
+│       ├── markdown.py
+│       └── html.py
+├── setup.py
+├── pyproject.toml
+├── LICENSE
+└── README.md
 ```
 
 ---
